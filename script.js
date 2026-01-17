@@ -1,296 +1,280 @@
-// Mobile Menu Toggle
-const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-const navMenu = document.getElementById('navMenu');
-const navLinks = document.querySelectorAll('.nav-link');
+// Wait for DOM to be fully loaded
+document.addEventListener('DOMContentLoaded', () => {
+  // Mobile menu toggle
+  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+  const closeMenuBtn = document.getElementById('close-menu-btn');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const desktopNav = document.getElementById('desktop-nav');
+  const nav = document.querySelector('nav');
 
-if (mobileMenuToggle && navMenu) {
-    mobileMenuToggle.addEventListener('click', () => {
-        navMenu.classList.toggle('active');
-        mobileMenuToggle.classList.toggle('active');
+  // Show/hide desktop nav based on screen size
+  function handleResize() {
+    if (!desktopNav || !mobileMenuBtn) return;
+    
+    if (window.innerWidth >= 768) {
+      desktopNav.classList.remove('hidden');
+      desktopNav.classList.add('md:flex');
+      if (mobileMenuBtn) {
+        mobileMenuBtn.classList.add('md:hidden');
+      }
+      if (mobileMenu) {
+        mobileMenu.classList.add('hidden');
+        mobileMenu.classList.remove('flex');
+      }
+      document.body.style.overflow = '';
+    } else {
+      desktopNav.classList.add('hidden');
+      desktopNav.classList.remove('md:flex');
+      if (mobileMenuBtn) {
+        mobileMenuBtn.classList.remove('md:hidden');
+      }
+    }
+  }
+
+  // Initial check
+  handleResize();
+  window.addEventListener('resize', handleResize);
+
+  // Mobile menu toggle
+  if (mobileMenuBtn && mobileMenu) {
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenu.classList.remove('hidden');
+      mobileMenu.classList.add('flex');
+      document.body.style.overflow = 'hidden';
     });
+  }
 
-    // Close mobile menu when clicking on a link
-    navLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            navMenu.classList.remove('active');
-            mobileMenuToggle.classList.remove('active');
-        });
+  if (closeMenuBtn && mobileMenu) {
+    closeMenuBtn.addEventListener('click', () => {
+      mobileMenu.classList.add('hidden');
+      mobileMenu.classList.remove('flex');
+      document.body.style.overflow = '';
     });
-}
+  }
 
-// Navbar scroll effect
-const navbar = document.getElementById('navbar');
-
-if (navbar) {
-    window.addEventListener('scroll', () => {
-        const currentScroll = window.pageYOffset;
-        
-        if (currentScroll > 100) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
-        }
+  // Close mobile menu when clicking on a link
+  if (mobileMenu) {
+    const mobileMenuLinks = mobileMenu.querySelectorAll('a');
+    mobileMenuLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+        mobileMenu.classList.remove('flex');
+        document.body.style.overflow = '';
+      });
     });
-}
+  }
 
-// Smooth scrolling for same-page anchor links only
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  // Smooth scrolling for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
-        const href = this.getAttribute('href');
-        // Only prevent default if it's a same-page anchor (not a hash-only link)
-        if (href !== '#' && href.length > 1) {
-            const target = document.querySelector(href);
-            
-            if (target) {
-                e.preventDefault();
-                const offsetTop = target.offsetTop - 80; // Account for fixed navbar
-                window.scrollTo({
-                    top: offsetTop,
-                    behavior: 'smooth'
-                });
-            }
-        }
+      const href = this.getAttribute('href');
+      if (href === '#' || !href) return;
+      
+      e.preventDefault();
+      const target = document.querySelector(href);
+      if (target && nav) {
+        const navHeight = nav.offsetHeight;
+        const targetPosition = target.offsetTop - navHeight;
+        
+        window.scrollTo({
+          top: targetPosition,
+          behavior: 'smooth'
+        });
+      }
     });
+  });
+
+  // Add scroll effect to navigation
+  if (nav) {
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.pageYOffset;
+      
+      if (currentScroll > 100) {
+        nav.classList.add('shadow-sm');
+      } else {
+        nav.classList.remove('shadow-sm');
+      }
+    });
+  }
+});
+
+// Contact form handling
+document.addEventListener('DOMContentLoaded', () => {
+  const contactForm = document.getElementById('contact-form');
+  const formMessage = document.getElementById('form-message');
+
+  function showFormMessage(message, type) {
+    if (!formMessage) return;
+    
+    formMessage.textContent = message;
+    formMessage.classList.remove('hidden');
+    
+    if (type === 'success') {
+      formMessage.style.backgroundColor = 'oklch(0.8 0.1 150)';
+      formMessage.style.color = 'oklch(0.2 0.05 150)';
+      formMessage.style.border = '1px solid oklch(0.7 0.1 150)';
+    } else {
+      formMessage.style.backgroundColor = 'oklch(0.95 0.05 25)';
+      formMessage.style.color = 'oklch(0.3 0.1 25)';
+      formMessage.style.border = '1px solid oklch(0.8 0.1 25)';
+    }
+    
+    // Hide message after 5 seconds
+    setTimeout(() => {
+      formMessage.classList.add('hidden');
+    }, 5000);
+  }
+
+  if (contactForm) {
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      // Get form data
+      const formData = new FormData(contactForm);
+      const data = Object.fromEntries(formData);
+      
+      // Simple validation
+      if (!data.name || !data.email || !data.message) {
+        showFormMessage('Please fill in all required fields.', 'error');
+        return;
+      }
+      
+      // Email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(data.email)) {
+        showFormMessage('Please enter a valid email address.', 'error');
+        return;
+      }
+      
+      // Simulate form submission (in production, this would send to a server)
+      showFormMessage('Thank you for your message! We\'ll get back to you soon.', 'success');
+      contactForm.reset();
+      
+      // In a real application, you would send the data to your server here
+      console.log('Form data:', data);
+    });
+  }
 });
 
 // Intersection Observer for fade-in animations
-const observerOptions = {
+document.addEventListener('DOMContentLoaded', () => {
+  const observerOptions = {
     threshold: 0.1,
     rootMargin: '0px 0px -50px 0px'
-};
+  };
 
-const observer = new IntersectionObserver((entries) => {
+  const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
-        }
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
     });
-}, observerOptions);
+  }, observerOptions);
 
-// Observe animated elements on page load
+  // Observe all cards for animation
+  const cards = document.querySelectorAll('[class*="bg-card"]');
+  cards.forEach(card => {
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(20px)';
+    card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(card);
+  });
+});
+
+// Dark mode toggle functionality
 document.addEventListener('DOMContentLoaded', () => {
-    const animatedElements = document.querySelectorAll('.service-card, .product-category, .stat-item, .contact-item, .value-block, .step, .faq-item, .pricing-feature, .why-section, .comparison-item');
-    
-    animatedElements.forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(20px)';
-        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-        observer.observe(el);
-    });
-});
+  const themeToggle = document.getElementById('theme-toggle');
+  const themeToggleMobile = document.getElementById('theme-toggle-mobile');
+  const html = document.documentElement;
 
-// Contact Form Handling
-const contactForm = document.getElementById('contactForm');
-
-if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        
-        // Get form data
-        const formData = new FormData(contactForm);
-        const data = Object.fromEntries(formData);
-        
-        // Simple validation - check required fields based on form type
-        const requiredFields = ['practice', 'name', 'email', 'phone'];
-        const missingFields = requiredFields.filter(field => !data[field]);
-        
-        if (missingFields.length > 0) {
-            showNotification('Please fill in all required fields.', 'error');
-            return;
-        }
-        
-        // Email validation
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(data.email)) {
-            showNotification('Please enter a valid email address.', 'error');
-            return;
-        }
-        
-        // Phone validation (basic)
-        const phoneRegex = /^[\d\s\-\(\)]+$/;
-        if (data.phone && !phoneRegex.test(data.phone)) {
-            showNotification('Please enter a valid phone number.', 'error');
-            return;
-        }
-        
-        // Simulate form submission (in a real application, this would send to a server)
-        showNotification('Thank you! We\'ll contact you within 24 hours to schedule your walkthrough.', 'success');
-        contactForm.reset();
-    });
-}
-
-// Notification system
-function showNotification(message, type = 'success') {
-    // Remove existing notification if any
-    const existingNotification = document.querySelector('.notification');
-    if (existingNotification) {
-        existingNotification.remove();
+  // Check for saved theme preference or default to light mode
+  function getThemePreference() {
+    const saved = localStorage.getItem('theme');
+    if (saved) {
+      return saved;
     }
-    
-    // Create notification element
-    const notification = document.createElement('div');
-    notification.className = `notification notification-${type}`;
-    notification.textContent = message;
-    
-    // Add styles
-    notification.style.cssText = `
-        position: fixed;
-        top: 100px;
-        right: 20px;
-        background-color: ${type === 'success' ? '#10b981' : '#ef4444'};
-        color: white;
-        padding: 1rem 1.5rem;
-        border-radius: 0.5rem;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        z-index: 10000;
-        animation: slideIn 0.3s ease;
-        max-width: 400px;
-    `;
-    
-    // Add animation keyframes if not already added
-    if (!document.querySelector('#notification-styles')) {
-        const style = document.createElement('style');
-        style.id = 'notification-styles';
-        style.textContent = `
-            @keyframes slideIn {
-                from {
-                    transform: translateX(400px);
-                    opacity: 0;
-                }
-                to {
-                    transform: translateX(0);
-                    opacity: 1;
-                }
-            }
-            @keyframes slideOut {
-                from {
-                    transform: translateX(0);
-                    opacity: 1;
-                }
-                to {
-                    transform: translateX(400px);
-                    opacity: 0;
-                }
-            }
-        `;
-        document.head.appendChild(style);
+    // Check system preference
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return 'dark';
     }
-    
-    document.body.appendChild(notification);
-    
-    // Remove notification after 5 seconds
-    setTimeout(() => {
-        notification.style.animation = 'slideOut 0.3s ease';
-        setTimeout(() => {
-            notification.remove();
-        }, 300);
-    }, 5000);
-}
+    return 'light';
+  }
 
-// Add active state to navigation links based on current page
-document.addEventListener('DOMContentLoaded', () => {
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-    
-    // Set active state for current page
-    navLinks.forEach(link => {
-        const linkHref = link.getAttribute('href');
-        if (linkHref === currentPage || (currentPage === '' && linkHref === 'index.html')) {
-            link.classList.add('active');
-        }
-    });
-    
-    // Also handle same-page anchor links for homepage
-    if (currentPage === 'index.html' || currentPage === '') {
-        function updateActiveNavLink() {
-            const sections = document.querySelectorAll('section[id]');
-            const scrollY = window.pageYOffset;
-            
-            sections.forEach(section => {
-                const sectionHeight = section.offsetHeight;
-                const sectionTop = section.offsetTop - 100;
-                const sectionId = section.getAttribute('id');
-                const navLink = document.querySelector(`.nav-link[href="#${sectionId}"]`);
-                
-                if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
-                    navLinks.forEach(link => {
-                        if (link.getAttribute('href').startsWith('#')) {
-                            link.classList.remove('active');
-                        }
-                    });
-                    if (navLink) {
-                        navLink.classList.add('active');
-                    }
-                }
-            });
-        }
-        
-        window.addEventListener('scroll', updateActiveNavLink);
-    }
-});
-
-// Add active class styles for nav links
-const style = document.createElement('style');
-style.textContent = `
-    .nav-link.active {
-        color: var(--primary-color);
-    }
-    .nav-link.active::after {
-        width: 100%;
-    }
-`;
-document.head.appendChild(style);
-
-// Scroll to top functionality (optional enhancement)
-let scrollToTopBtn = document.createElement('button');
-scrollToTopBtn.innerHTML = '↑';
-scrollToTopBtn.className = 'scroll-to-top';
-scrollToTopBtn.style.cssText = `
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    width: 50px;
-    height: 50px;
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    border-radius: 50%;
-    font-size: 1.5rem;
-    cursor: pointer;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-    z-index: 999;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-`;
-
-scrollToTopBtn.addEventListener('click', () => {
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
-});
-
-document.body.appendChild(scrollToTopBtn);
-
-window.addEventListener('scroll', () => {
-    if (window.pageYOffset > 300) {
-        scrollToTopBtn.style.opacity = '1';
-        scrollToTopBtn.style.visibility = 'visible';
+  // Apply theme
+  function applyTheme(theme) {
+    if (theme === 'dark') {
+      html.classList.remove('light');
+      html.classList.add('dark');
     } else {
-        scrollToTopBtn.style.opacity = '0';
-        scrollToTopBtn.style.visibility = 'hidden';
+      html.classList.remove('dark');
+      html.classList.add('light');
     }
-});
+    localStorage.setItem('theme', theme);
+    updateThemeIcons();
+  }
 
-// Add hover effect to scroll to top button
-scrollToTopBtn.addEventListener('mouseenter', () => {
-    scrollToTopBtn.style.transform = 'translateY(-5px)';
-    scrollToTopBtn.style.boxShadow = '0 10px 15px -3px rgba(0, 0, 0, 0.1)';
-});
+  // Update icon visibility
+  function updateThemeIcons() {
+    const isDark = html.classList.contains('dark');
+    const sunIcons = document.querySelectorAll('.sun-icon');
+    const moonIcons = document.querySelectorAll('.moon-icon');
+    
+    sunIcons.forEach(icon => {
+      icon.style.display = isDark ? 'none' : 'block';
+    });
+    
+    moonIcons.forEach(icon => {
+      icon.style.display = isDark ? 'block' : 'none';
+    });
+  }
 
-scrollToTopBtn.addEventListener('mouseleave', () => {
-    scrollToTopBtn.style.transform = 'translateY(0)';
-    scrollToTopBtn.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1)';
+  // Toggle theme with animation
+  function toggleTheme(event) {
+    event.preventDefault();
+    event.stopPropagation();
+    
+    const iconWrapper = event.currentTarget.querySelector('.theme-icon-wrapper');
+    
+    if (!iconWrapper) return;
+    
+    // Add animation class
+    iconWrapper.classList.add('animating');
+    
+    // Toggle theme
+    const currentTheme = html.classList.contains('dark') ? 'dark' : 'light';
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    
+    applyTheme(newTheme);
+    
+    // Remove animation class after animation completes
+    setTimeout(() => {
+      iconWrapper.classList.remove('animating');
+    }, 600);
+  }
+
+  // Initialize theme on page load
+  const initialTheme = getThemePreference();
+  applyTheme(initialTheme);
+
+  // Add event listeners
+  if (themeToggle) {
+    themeToggle.addEventListener('click', toggleTheme);
+  }
+
+  if (themeToggleMobile) {
+    themeToggleMobile.addEventListener('click', toggleTheme);
+  }
+
+  // Listen for system theme changes
+  if (window.matchMedia) {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    mediaQuery.addEventListener('change', (e) => {
+      // Only auto-switch if user hasn't manually set a preference
+      if (!localStorage.getItem('theme')) {
+        applyTheme(e.matches ? 'dark' : 'light');
+      }
+    });
+  }
 });
 

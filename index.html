@@ -1,184 +1,386 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="light">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Morency Supply manages essential dental consumables on a recurring route so your staff never reorders, tracks inventory, or runs out mid-patient.">
-    <title>Morency Supply - Dental Consumables, Fully Managed</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Morency Supply - Dental Consumable Supply Delivery</title>
+  <meta name="description" content="Reliable dental consumable supply delivery service. Fast, efficient, and trusted by dental practices nationwide.">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            background: 'var(--background)',
+            foreground: 'var(--foreground)',
+            primary: 'var(--primary)',
+            'primary-foreground': 'var(--primary-foreground)',
+            secondary: 'var(--secondary)',
+            'secondary-foreground': 'var(--secondary-foreground)',
+            muted: 'var(--muted)',
+            'muted-foreground': 'var(--muted-foreground)',
+            accent: 'var(--accent)',
+            'accent-foreground': 'var(--accent-foreground)',
+            border: 'var(--border)',
+            input: 'var(--input)',
+            ring: 'var(--ring)',
+            card: 'var(--card)',
+            'card-foreground': 'var(--card-foreground)',
+          },
+          fontFamily: {
+            sans: ['var(--font-sans)', 'ui-monospace', 'monospace'],
+            mono: ['var(--font-mono)', 'monospace'],
+          },
+          borderRadius: {
+            DEFAULT: 'var(--radius)',
+            sm: 'calc(var(--radius) - 4px)',
+            md: 'calc(var(--radius) - 2px)',
+            lg: 'var(--radius)',
+            xl: 'calc(var(--radius) + 4px)',
+          },
+          boxShadow: {
+            '2xs': 'var(--shadow-2xs)',
+            'xs': 'var(--shadow-xs)',
+            'sm': 'var(--shadow-sm)',
+            DEFAULT: 'var(--shadow)',
+            'md': 'var(--shadow-md)',
+            'lg': 'var(--shadow-lg)',
+            'xl': 'var(--shadow-xl)',
+            '2xl': 'var(--shadow-2xl)',
+          },
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar" id="navbar">
-        <div class="container">
-            <div class="nav-wrapper">
-                <div class="logo">
-                    <a href="index.html"><h1>Morency Supply</h1></a>
-                </div>
-                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-                <ul class="nav-menu" id="navMenu">
-                    <li><a href="index.html" class="nav-link">Home</a></li>
-                    <li><a href="services.html" class="nav-link">Services</a></li>
-                    <li><a href="pricing.html" class="nav-link">Pricing</a></li>
-                    <li><a href="why.html" class="nav-link">Why Morency</a></li>
-                    <li><a href="faqs.html" class="nav-link">FAQs</a></li>
-                    <li><a href="about.html" class="nav-link">About</a></li>
-                    <li><a href="contact.html" class="nav-link btn-nav-cta">Schedule Walkthrough</a></li>
-                </ul>
-            </div>
+  <!-- Navigation -->
+  <nav class="sticky top-0 z-50 bg-background border-b border-border backdrop-blur-sm bg-background/80">
+    <div class="container mx-auto px-4">
+      <div class="flex items-center justify-between py-4">
+        <div class="flex items-center gap-2">
+          <h1 class="text-xl font-bold text-primary">Morency Supply</h1>
         </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <h1 class="hero-title">Dental consumables, fully managed.</h1>
-                <p class="hero-subtitle">Morency Supply manages essential dental consumables on a recurring route so your staff never reorders, tracks inventory, or runs out mid-patient.</p>
-                <div class="hero-buttons">
-                    <a href="contact.html" class="btn btn-primary">Schedule a 10-Minute Walkthrough</a>
-                    <a href="#how-it-works" class="btn btn-secondary">See How It Works</a>
-                </div>
-            </div>
+        
+        <!-- Desktop Navigation -->
+        <div class="hidden md:flex items-center gap-4" id="desktop-nav">
+          <a href="#services" class="px-4 py-2 text-foreground hover:bg-accent hover:text-accent-foreground rounded transition-colors">Services</a>
+          <a href="#products" class="px-4 py-2 text-foreground hover:bg-accent hover:text-accent-foreground rounded transition-colors">Products</a>
+          <a href="#about" class="px-4 py-2 text-foreground hover:bg-accent hover:text-accent-foreground rounded transition-colors">About</a>
+          <button id="theme-toggle" class="p-2 text-foreground hover:bg-accent hover:text-accent-foreground rounded transition-all duration-300 relative overflow-hidden group" aria-label="Toggle dark mode">
+            <span class="theme-icon-wrapper inline-block transition-transform duration-500 ease-in-out">
+              <svg class="w-5 h-5 sun-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display: block;">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+              </svg>
+              <svg class="w-5 h-5 moon-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display: none;">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+              </svg>
+            </span>
+          </button>
+          <a href="#contact" class="px-4 py-2 bg-primary text-primary-foreground rounded hover:opacity-90 transition-opacity">Contact Us</a>
         </div>
-    </section>
 
-    <!-- Core Value Blocks -->
-    <section class="value-blocks">
-        <div class="container">
-            <div class="value-grid">
-                <div class="value-block">
-                    <h3>Zero Reordering</h3>
-                    <ul>
-                        <li>Your team never places another supply order</li>
-                        <li>No tracking</li>
-                        <li>No spreadsheets</li>
-                        <li>No emergency shortages</li>
-                    </ul>
-                </div>
-                <div class="value-block">
-                    <h3>Never Run Out</h3>
-                    <ul>
-                        <li>Par levels set once</li>
-                        <li>Restocked weekly or bi-weekly</li>
-                        <li>Emergency top-offs included</li>
-                    </ul>
-                </div>
-                <div class="value-block">
-                    <h3>One Monthly Invoice</h3>
-                    <ul>
-                        <li>Flat monthly fee</li>
-                        <li>Based on chair count</li>
-                        <li>No surprise charges</li>
-                    </ul>
-                </div>
-                <div class="value-block">
-                    <h3>Local and Accountable</h3>
-                    <ul>
-                        <li>Same route day</li>
-                        <li>Same delivery window</li>
-                        <li>Same local contact</li>
-                        <li>No call centers</li>
-                    </ul>
-                </div>
-            </div>
+        <!-- Mobile Menu Button -->
+        <button class="md:hidden p-2 text-foreground hover:bg-accent hover:text-accent-foreground rounded transition-colors" id="mobile-menu-btn" aria-label="Toggle menu">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div class="hidden fixed inset-0 bg-background z-50 p-4 flex-col gap-4" id="mobile-menu">
+      <div class="flex items-center justify-between">
+        <h2 class="text-xl font-bold text-primary">Morency Supply</h2>
+        <button class="p-2 text-foreground hover:bg-accent hover:text-accent-foreground rounded transition-colors" id="close-menu-btn" aria-label="Close menu">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <a href="#services" class="px-4 py-2 text-foreground hover:bg-accent hover:text-accent-foreground rounded transition-colors">Services</a>
+      <a href="#products" class="px-4 py-2 text-foreground hover:bg-accent hover:text-accent-foreground rounded transition-colors">Products</a>
+      <a href="#about" class="px-4 py-2 text-foreground hover:bg-accent hover:text-accent-foreground rounded transition-colors">About</a>
+      <button id="theme-toggle-mobile" class="px-4 py-2 text-foreground hover:bg-accent hover:text-accent-foreground rounded transition-all duration-300 relative overflow-hidden group text-left" aria-label="Toggle dark mode">
+        <span class="theme-icon-wrapper inline-block transition-transform duration-500 ease-in-out">
+          <svg class="w-5 h-5 sun-icon inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display: inline-block;">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+          </svg>
+          <svg class="w-5 h-5 moon-icon inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="display: none;">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+          </svg>
+          <span class="theme-toggle-text">Toggle Theme</span>
+        </span>
+      </button>
+      <a href="#contact" class="px-4 py-2 bg-primary text-primary-foreground rounded hover:opacity-90 transition-opacity">Contact Us</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="py-24 md:py-32 text-center">
+    <div class="container mx-auto px-4">
+      <h1 class="text-4xl md:text-5xl font-extrabold mb-6 tracking-tight">Reliable Dental Supply Delivery</h1>
+      <p class="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+        Streamline your dental practice with fast, efficient delivery of consumable supplies. 
+        Trusted by practices nationwide for quality and reliability.
+      </p>
+      <div class="flex items-center justify-center gap-4 flex-wrap">
+        <a href="#contact" class="px-6 py-3 bg-primary text-primary-foreground rounded hover:opacity-90 transition-opacity font-medium">Get Started</a>
+        <a href="#services" class="px-6 py-3 border border-border rounded hover:bg-accent hover:text-accent-foreground transition-colors font-medium">Learn More</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services Section -->
+  <section class="py-16 md:py-24 bg-muted" id="services">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4">Why Choose Morency Supply?</h2>
+        <p class="text-muted-foreground max-w-2xl mx-auto">
+          We deliver the supplies you need, when you need them, with unmatched reliability.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Service Card 1 -->
+        <div class="bg-card text-card-foreground rounded-lg border border-border p-6 shadow-sm hover:shadow-md transition-shadow">
+          <div class="w-12 h-12 rounded bg-primary text-primary-foreground flex items-center justify-center mb-4 text-2xl">🚚</div>
+          <h3 class="text-xl font-semibold mb-2">Fast Delivery</h3>
+          <p class="text-muted-foreground">
+            Same-day and next-day delivery options available. Get your supplies when you need them most.
+          </p>
         </div>
-    </section>
 
-    <!-- Who It's For -->
-    <section class="who-its-for">
-        <div class="container">
-            <h2>Who It's For</h2>
-            <div class="who-content">
-                <ul>
-                    <li>Privately owned dental practices</li>
-                    <li>3–10 chair offices</li>
-                    <li>Practices that want operations to run quietly</li>
-                </ul>
-                <p class="exclusion-note"><strong>Not designed for hospital systems or DSOs.</strong></p>
-            </div>
+        <!-- Service Card 2 -->
+        <div class="bg-card text-card-foreground rounded-lg border border-border p-6 shadow-sm hover:shadow-md transition-shadow">
+          <div class="w-12 h-12 rounded bg-primary text-primary-foreground flex items-center justify-center mb-4 text-2xl">✅</div>
+          <h3 class="text-xl font-semibold mb-2">Quality Assured</h3>
+          <p class="text-muted-foreground">
+            We source only the highest quality dental consumables from trusted manufacturers.
+          </p>
         </div>
-    </section>
 
-    <!-- How It Works -->
-    <section id="how-it-works" class="how-it-works">
-        <div class="container">
-            <h2>How It Works</h2>
-            <div class="steps-grid">
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <h3>Set par levels once</h3>
-                    <p>We work with you to establish appropriate inventory levels for your practice.</p>
-                </div>
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <h3>We restock on a recurring route</h3>
-                    <p>Weekly or bi-weekly deliveries keep your supplies at the right levels.</p>
-                </div>
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <h3>One predictable monthly invoice</h3>
-                    <p>Simple, flat-rate pricing based on your chair count. No surprises.</p>
-                </div>
-            </div>
+        <!-- Service Card 3 -->
+        <div class="bg-card text-card-foreground rounded-lg border border-border p-6 shadow-sm hover:shadow-md transition-shadow">
+          <div class="w-12 h-12 rounded bg-primary text-primary-foreground flex items-center justify-center mb-4 text-2xl">📦</div>
+          <h3 class="text-xl font-semibold mb-2">Wide Selection</h3>
+          <p class="text-muted-foreground">
+            Comprehensive inventory of dental supplies, from basic consumables to specialized equipment.
+          </p>
         </div>
-    </section>
 
-    <!-- Social Proof -->
-    <section class="social-proof">
-        <div class="container">
-            <p class="proof-text">Serving dental practices across east-central Indiana</p>
+        <!-- Service Card 4 -->
+        <div class="bg-card text-card-foreground rounded-lg border border-border p-6 shadow-sm hover:shadow-md transition-shadow">
+          <div class="w-12 h-12 rounded bg-primary text-primary-foreground flex items-center justify-center mb-4 text-2xl">💳</div>
+          <h3 class="text-xl font-semibold mb-2">Flexible Billing</h3>
+          <p class="text-muted-foreground">
+            Multiple payment options and flexible billing terms to suit your practice's needs.
+          </p>
         </div>
-    </section>
 
-    <!-- CTA Section -->
-    <section class="cta-section">
-        <div class="container">
-            <h2>Ready to eliminate supply management from your to-do list?</h2>
-            <p>Schedule a 10-minute walkthrough. No obligation.</p>
-            <a href="contact.html" class="btn btn-primary btn-large">Schedule a 10-Minute Walkthrough</a>
+        <!-- Service Card 5 -->
+        <div class="bg-card text-card-foreground rounded-lg border border-border p-6 shadow-sm hover:shadow-md transition-shadow">
+          <div class="w-12 h-12 rounded bg-primary text-primary-foreground flex items-center justify-center mb-4 text-2xl">📊</div>
+          <h3 class="text-xl font-semibold mb-2">Inventory Management</h3>
+          <p class="text-muted-foreground">
+            Track orders, manage inventory, and set up automatic reorders through our easy-to-use platform.
+          </p>
         </div>
-    </section>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>Morency Supply</h3>
-                    <p>Dental consumables, fully managed.</p>
-                </div>
-                <div class="footer-section">
-                    <h4>Quick Links</h4>
-                    <ul>
-                        <li><a href="index.html">Home</a></li>
-                        <li><a href="services.html">Services</a></li>
-                        <li><a href="pricing.html">Pricing</a></li>
-                        <li><a href="why.html">Why Morency</a></li>
-                        <li><a href="faqs.html">FAQs</a></li>
-                        <li><a href="about.html">About</a></li>
-                        <li><a href="contact.html">Contact</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Service Area</h4>
-                    <p>East-Central Indiana</p>
-                </div>
-                <div class="footer-section">
-                    <h4>Contact</h4>
-                    <p><a href="contact.html">Schedule a Walkthrough</a></p>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 Morency Supply. All rights reserved. | <a href="#privacy">Privacy Policy</a></p>
-            </div>
+        <!-- Service Card 6 -->
+        <div class="bg-card text-card-foreground rounded-lg border border-border p-6 shadow-sm hover:shadow-md transition-shadow">
+          <div class="w-12 h-12 rounded bg-primary text-primary-foreground flex items-center justify-center mb-4 text-2xl">🎯</div>
+          <h3 class="text-xl font-semibold mb-2">Dedicated Support</h3>
+          <p class="text-muted-foreground">
+            Our customer service team is here to help with any questions or special requests.
+          </p>
         </div>
-    </footer>
+      </div>
+    </div>
+  </section>
 
-    <script src="script.js"></script>
+  <!-- Products Section -->
+  <section class="py-16 md:py-24" id="products">
+    <div class="container mx-auto px-4">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4">Our Product Categories</h2>
+        <p class="text-muted-foreground max-w-2xl mx-auto">
+          Everything your dental practice needs in one convenient place.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="bg-card text-card-foreground rounded-lg border border-border p-6 shadow-sm hover:shadow-md transition-shadow">
+          <h3 class="text-xl font-semibold mb-2">Infection Control Supplies</h3>
+          <p class="text-muted-foreground mb-4">
+            Gloves, masks, disinfectants, sterilization pouches, and barrier protection products.
+          </p>
+          <a href="#contact" class="block w-full px-4 py-2 border border-border rounded hover:bg-accent hover:text-accent-foreground transition-colors text-center font-medium">Request Catalog</a>
+        </div>
+
+        <div class="bg-card text-card-foreground rounded-lg border border-border p-6 shadow-sm hover:shadow-md transition-shadow">
+          <h3 class="text-xl font-semibold mb-2">Restorative Materials</h3>
+          <p class="text-muted-foreground mb-4">
+            Composite resins, bonding agents, cements, and all materials for restorative procedures.
+          </p>
+          <a href="#contact" class="block w-full px-4 py-2 border border-border rounded hover:bg-accent hover:text-accent-foreground transition-colors text-center font-medium">Request Catalog</a>
+        </div>
+
+        <div class="bg-card text-card-foreground rounded-lg border border-border p-6 shadow-sm hover:shadow-md transition-shadow">
+          <h3 class="text-xl font-semibold mb-2">Endodontic Supplies</h3>
+          <p class="text-muted-foreground mb-4">
+            Files, gutta-percha, sealers, and all endodontic treatment essentials.
+          </p>
+          <a href="#contact" class="block w-full px-4 py-2 border border-border rounded hover:bg-accent hover:text-accent-foreground transition-colors text-center font-medium">Request Catalog</a>
+        </div>
+
+        <div class="bg-card text-card-foreground rounded-lg border border-border p-6 shadow-sm hover:shadow-md transition-shadow">
+          <h3 class="text-xl font-semibold mb-2">Prosthetic Materials</h3>
+          <p class="text-muted-foreground mb-4">
+            Impression materials, temporary cements, and supplies for prosthetic work.
+          </p>
+          <a href="#contact" class="block w-full px-4 py-2 border border-border rounded hover:bg-accent hover:text-accent-foreground transition-colors text-center font-medium">Request Catalog</a>
+        </div>
+
+        <div class="bg-card text-card-foreground rounded-lg border border-border p-6 shadow-sm hover:shadow-md transition-shadow">
+          <h3 class="text-xl font-semibold mb-2">Preventive Care Products</h3>
+          <p class="text-muted-foreground mb-4">
+            Fluoride treatments, sealants, prophylaxis paste, and preventive care essentials.
+          </p>
+          <a href="#contact" class="block w-full px-4 py-2 border border-border rounded hover:bg-accent hover:text-accent-foreground transition-colors text-center font-medium">Request Catalog</a>
+        </div>
+
+        <div class="bg-card text-card-foreground rounded-lg border border-border p-6 shadow-sm hover:shadow-md transition-shadow">
+          <h3 class="text-xl font-semibold mb-2">Office Supplies</h3>
+          <p class="text-muted-foreground mb-4">
+            Patient bibs, cups, paper products, and general office consumables.
+          </p>
+          <a href="#contact" class="block w-full px-4 py-2 border border-border rounded hover:bg-accent hover:text-accent-foreground transition-colors text-center font-medium">Request Catalog</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="py-16 md:py-24 bg-muted" id="about">
+    <div class="container mx-auto px-4">
+      <div class="max-w-3xl mx-auto text-center">
+        <h2 class="text-3xl md:text-4xl font-bold mb-6">About Morency Supply</h2>
+        <p class="text-lg text-muted-foreground mb-4">
+          Morency Supply has been serving dental practices across the nation for over a decade. 
+          We understand the critical importance of having the right supplies at the right time, 
+          and we've built our business around reliability, quality, and exceptional service.
+        </p>
+        <p class="text-lg text-muted-foreground mb-4">
+          Our team of dental supply experts works closely with practices of all sizes to ensure 
+          you have access to the products you need, when you need them. From small private practices 
+          to large dental groups, we provide personalized service that fits your unique needs.
+        </p>
+        <p class="text-lg text-muted-foreground">
+          Trust Morency Supply to keep your practice running smoothly with dependable delivery 
+          and quality products you can count on.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="py-16 md:py-24" id="contact">
+    <div class="container mx-auto px-4">
+      <div class="max-w-2xl mx-auto">
+        <div class="text-center mb-12">
+          <h2 class="text-3xl md:text-4xl font-bold mb-4">Get In Touch</h2>
+          <p class="text-muted-foreground">
+            Ready to streamline your supply chain? Contact us today to learn more about our services.
+          </p>
+        </div>
+
+        <form class="bg-card text-card-foreground rounded-lg border border-border p-6 shadow-sm flex flex-col gap-6" id="contact-form">
+          <div class="flex flex-col gap-2">
+            <label for="name" class="font-medium">Name</label>
+            <input type="text" id="name" name="name" class="w-full rounded border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring" required placeholder="Your name">
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label for="email" class="font-medium">Email</label>
+            <input type="email" id="email" name="email" class="w-full rounded border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring" required placeholder="your.email@example.com">
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label for="practice" class="font-medium">Practice Name</label>
+            <input type="text" id="practice" name="practice" class="w-full rounded border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring" placeholder="Your practice name">
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label for="phone" class="font-medium">Phone</label>
+            <input type="tel" id="phone" name="phone" class="w-full rounded border border-input bg-background px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-ring" placeholder="(555) 123-4567">
+          </div>
+
+          <div class="flex flex-col gap-2">
+            <label for="message" class="font-medium">Message</label>
+            <textarea id="message" name="message" class="w-full rounded border border-input bg-background px-3 py-2 text-sm min-h-[100px] resize-y focus:outline-none focus:ring-2 focus:ring-ring" required placeholder="Tell us about your supply needs..."></textarea>
+          </div>
+
+          <button type="submit" class="px-6 py-3 bg-primary text-primary-foreground rounded hover:opacity-90 transition-opacity font-medium">Send Message</button>
+          <div id="form-message" class="hidden p-4 rounded mt-4"></div>
+        </form>
+
+        <div class="text-center mt-12 p-8 bg-muted rounded-lg">
+          <h3 class="text-xl font-semibold mb-4">Contact Information</h3>
+          <p class="text-muted-foreground mb-2">
+            <strong>Phone:</strong> (555) 123-4567
+          </p>
+          <p class="text-muted-foreground mb-2">
+            <strong>Email:</strong> info@morencysupply.com
+          </p>
+          <p class="text-muted-foreground">
+            <strong>Hours:</strong> Monday - Friday, 8:00 AM - 6:00 PM EST
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-muted border-t border-border py-12">
+    <div class="container mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+        <div>
+          <h3 class="font-bold mb-4 text-primary">Morency Supply</h3>
+          <p class="text-muted-foreground text-sm">
+            Your trusted partner for dental consumable supplies.
+          </p>
+        </div>
+        <div>
+          <h4 class="font-semibold mb-4">Services</h4>
+          <ul class="list-none flex flex-col gap-2">
+            <li><a href="#services" class="text-muted-foreground text-sm hover:text-foreground transition-colors no-underline">Delivery Options</a></li>
+            <li><a href="#products" class="text-muted-foreground text-sm hover:text-foreground transition-colors no-underline">Product Catalog</a></li>
+            <li><a href="#contact" class="text-muted-foreground text-sm hover:text-foreground transition-colors no-underline">Request Quote</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-semibold mb-4">Company</h4>
+          <ul class="list-none flex flex-col gap-2">
+            <li><a href="#about" class="text-muted-foreground text-sm hover:text-foreground transition-colors no-underline">About Us</a></li>
+            <li><a href="#contact" class="text-muted-foreground text-sm hover:text-foreground transition-colors no-underline">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-border pt-8 text-center">
+        <p class="text-muted-foreground text-sm">
+          © 2024 Morency Supply. All rights reserved.
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
+
